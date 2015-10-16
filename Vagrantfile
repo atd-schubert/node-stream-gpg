@@ -70,5 +70,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get update
     sudo apt-get upgrade -y
     sudo apt-get install -y nodejs gnupg-doc
+
+    npm install -g mocha
   SHELL
 end

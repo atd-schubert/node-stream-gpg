@@ -172,5 +172,8 @@ console.log(result, pub);
         describe('List keys', function () {
             it('should get tests, but we need generate functions first');
         });
+        describe('List secret keys', function () {
+            it('should get tests, but we need generate functions first');
+        });
     });
 });

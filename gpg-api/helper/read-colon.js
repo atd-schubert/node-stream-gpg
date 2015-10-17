@@ -1,49 +1,12 @@
 /*jslint node:true*/
 'use strict';
 
-/* JSDoc declarations */
-/**
- * A single key entry from gpg key-ring
- *
- * @name GPGKeyEntry
- * @property {String} type
- * @property {String} stealness
- * @property {String} model
- * @property {Date} creationDate
- * @property {{}} trustedUsers
- * @property {Number} trustedUsers.marginal
- * @property {Number} trustedUsers.complete
- * @property {Number} depth
- * @property {Number} keyLength
- * @property {String} publicKeyAlgorithm
- * @property {String} keyId
- * @property {String} uidHash
- * @property {String} ownerTrust
- * @property {String} uid
- * @property {String} signatureClass
- * @property {String} issuer
- * @property {String} flag
- * @property {String} tokenSerialNumber
- * @property {String} hashAlgorithm
- * @property {String} curveName
- */
-
-/**
- *
- * @name GPGKeyRing
- * @property {GPGKeyEntry[]} publicKeys
- * @property {GPGKeyEntry[]} secretKeys
- * @property {GPGKeyEntry} trustInfo
- */
-
-/* Private functions */
-
 /**
  * Parse a single line of a '--with-colons' gpg response
  *
  * @private
  * @param {String} line - Only one line
- * @returns {GPGKeyEntry}
+ * @returns {GPGKeyElement}
  */
 var readColonLine = function (line) {
     var lineArr,
@@ -155,7 +118,7 @@ var addKeyProperties = function (obj) {
  * Parse a whole response of a '--with-colons' gpg response
  *
  * @param {Buffer|String} data
- * @returns {GPGKeyRing}
+ * @returns {WebOfTrust}
  */
 var parseColonResponse = function (data) {
     var lines,

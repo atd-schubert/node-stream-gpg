@@ -8,6 +8,7 @@ var helper = require('./helper/read-colon');
 
 /**
  * Get Key info
+ * @param {getKeyInfo~resultCallback} cb - Result callback
  * @returns {stream.writable}
  */
 var getKeyInfo  = function getGPGKeyInfo(cb) {
@@ -33,6 +34,11 @@ var getKeyInfo  = function getGPGKeyInfo(cb) {
             return cb(new Error('Fingerprint ended with exit code ' + code));
         }
         ws.emit('exit', code);
+        /**
+         * @callback getKeyInfo~resultCallback
+         * @param {Error|null} error - Error if there is one
+         * @param {WebOfTrust} webOfTrust - Key information
+         */
         cb(null, helper.parseColonResponse(response.join('')));
     });
 

@@ -72,5 +72,9 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y nodejs gnupg-doc
 
     npm install -g mocha
+
+    # On VM /dev/rendom has not enough entropy! Use /dev/urandom
+    mv /dev/random /dev/orandom
+    ln /dev/urandom /dev/random
   SHELL
 end

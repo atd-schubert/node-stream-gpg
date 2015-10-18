@@ -3,6 +3,7 @@
 'use strict';
 
 module.exports = {
+    genKey: require('./gen-key'),
     listKeys: require('./list-keys'),
     listSecretKeys: require('./list-secret-keys')
 };

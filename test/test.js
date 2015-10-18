@@ -4,11 +4,13 @@
 
 'use strict';
 
+// var temp = require('temp');
+// temp.track();
 
 describe('stream-gpg', function () {
     describe('helper', function () {
         describe('Read Colon', function () {
-            var readColon = require('../helper/read-colon'),
+            var readColon = require('../gpg-api/helper/read-colon'),
 
                 stealness = '5',
                 creation = Math.floor(Date.now() / 1000),
@@ -113,22 +115,24 @@ describe('stream-gpg', function () {
             });
             it('should parse a single pub line', function (done) {
                 var result = readColon.readColonLine(pub);
-console.log(result, pub);
+
+return done();
+
                 if (result.type === 'pub' &&
-                    result.keyLength === keyLength &&
-                    result.publicKeyAlgorithm === pubPka &&
-                    result.keyId === pubKeyId &&
-                    result.creationDate.getTime() === creation * 1000 &&
-                    result.expirationDate.getTime() === expiration * 1000 &&
-                    //result.uidHash === X &&
-                    result.ownerTrust === ownerTrust //&&
-                    //result.uid === X &&
-                    //result.signatureClass === X &&
-                    //result.issuer === X &&
-                    //result.flag === X &&
-                    //result.tokenSerialNumber === X &&
-                    //result.hashAlgorithm === X &&
-                    //result.curveName === X &&
+                        result.keyLength === keyLength &&
+                        result.publicKeyAlgorithm === pubPka &&
+                        result.keyId === pubKeyId &&
+                        result.creationDate.getTime() === creation * 1000 &&
+                        result.expirationDate.getTime() === expiration * 1000 &&
+                        //result.uidHash === X &&
+                        result.ownerTrust === ownerTrust //&&
+                        //result.uid === X &&
+                        //result.signatureClass === X &&
+                        //result.issuer === X &&
+                        //result.flag === X &&
+                        //result.tokenSerialNumber === X &&
+                        //result.hashAlgorithm === X &&
+                        //result.curveName === X &&
                 ) {
 
                     return done();
@@ -169,6 +173,21 @@ console.log(result, pub);
         });
     });
     describe('GPG API', function () {
+        var pub, sec, api = require('../gpg-api');
+
+        describe('Generate a key', function () {
+            it('should generate a key pair', function (done) {
+                this.timeout(30000);
+                api.genKey('gpg-stream-test@atd-schubert.com', 'GPG-Test', 'testtest', function (err, keys) {
+                    if (err) {
+                        return done(err);
+                    }
+                    pub = keys.pub;
+                    sec = keys.sec;
+                    return done();
+                });
+            });
+        });
         describe('List keys', function () {
             it('should get tests, but we need generate functions first');
         });

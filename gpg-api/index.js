@@ -4,6 +4,7 @@
 
 module.exports = {
     genKey: require('./gen-key'),
+    importKey: require('./import-key'),
     listKeys: require('./list-keys'),
     listSecretKeys: require('./list-secret-keys')
 };

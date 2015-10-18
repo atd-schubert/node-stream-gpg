@@ -173,12 +173,12 @@ return done();
         });
     });
     describe('GPG API', function () {
-        var pub, sec, api = require('../gpg-api');
+        var pub, sec, api = require('../gpg-api'), name = 'GPG-Test ' + Date.now();
 
         describe('Generate a key', function () {
             it('should generate a key pair', function (done) {
                 this.timeout(30000);
-                api.genKey('gpg-stream-test@atd-schubert.com', 'GPG-Test', 'testtest', function (err, keys) {
+                api.genKey('gpg-stream-test@atd-schubert.com', name, 'testtest', function (err, keys) {
                     if (err) {
                         return done(err);
                     }
@@ -186,6 +186,58 @@ return done();
                     sec = keys.sec;
                     return done();
                 });
+            });
+        });
+        describe('Import the keys', function () {
+            it('should import the public key', function (done) {
+                var stream = api.importKey();
+
+                this.timeout(30000);
+
+                stream.on('exit', function (code) {
+                    if (code) {
+                        return done(new Error('There was an error while importing'));
+                    }
+                    api.listKeys(function (err, data) {
+                        var i;
+                        if (err) {
+                            return done(err);
+                        }
+                        for (i = 0; i < data.publicKeys.length; i += 1) {
+                            if (data.publicKeys[i].uid && data.publicKeys[i].uid.indexOf(name) !== -1) {
+                                return done();
+                            }
+                        }
+                        return done(new Error('Public Key not found in list'));
+                    });
+                });
+                stream.write(pub);
+                stream.end();
+            });
+            it('should import the secret key', function (done) {
+                var stream = api.importKey();
+
+                this.timeout(30000);
+
+                stream.on('exit', function (code) {
+                    if (code) {
+                        return done(new Error('There was an error while importing'));
+                    }
+                    api.listSecretKeys(function (err, data) {
+                        var i;
+                        if (err) {
+                            return done(err);
+                        }
+                        for (i = 0; i < data.secretKeys.length; i += 1) {
+                            if (data.secretKeys[i].uid && data.secretKeys[i].uid.indexOf(name) !== -1) {
+                                return done();
+                            }
+                        }
+                        return done(new Error('Secret Key not found in list'));
+                    });
+                });
+                stream.write(sec);
+                stream.end();
             });
         });
         describe('List keys', function () {

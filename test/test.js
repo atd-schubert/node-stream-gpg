@@ -185,7 +185,37 @@ return done();
                     pub = keys.pub;
                     sec = keys.sec;
                     return done();
+                }, {
+                    expirationDate: new Date(Date.now() + 1000 * 60 * 60)
                 });
+            });
+        });
+        describe('Get key-info', function () {
+            it('should get info from public key', function (done) {
+                var stream = api.getKeyInfo(function (err, data) {
+                    if (err) {
+                        return done(err);
+                    }
+                    if (data.publicKeys[0].uid.indexOf(name) !== -1) {
+                        return done();
+                    }
+                    return done(new Error('Wrong information'));
+                });
+                stream.write(pub);
+                stream.end();
+            });
+            it('should get info from secret key', function (done) {
+                var stream = api.getKeyInfo(function (err, data) {
+                    if (err) {
+                        return done(err);
+                    }
+                    if (data.secretKeys[0].uid.indexOf(name) !== -1) {
+                        return done();
+                    }
+                    return done(new Error('Wrong information'));
+                });
+                stream.write(sec);
+                stream.end();
             });
         });
         describe('Import the keys', function () {
